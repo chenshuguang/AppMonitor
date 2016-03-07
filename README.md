@@ -38,7 +38,7 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
 
 所以，一个初步方案大致是，实现一个基类 BaseActivity，并重写以下 onStart 和 onStop 回调方法：
 
-{% highlight java %}
+```java
     private static int compatStartCount = 0;
     private static boolean isCompatForeground = true;
 
@@ -61,7 +61,7 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
             onForegroundToBackground(activity);
         }
     }
-{% endhighlight %}  
+``` 
 
 ## 开始趟坑
 
@@ -72,7 +72,7 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
     
 按理来说，屏幕关闭的时候也符合条件，但是 android3 之前并未按照如此定义而来。所以需要 hack 一下：
 
-{% highlight java %}
+```java
     private static boolean isCompatLockStop = false;
 
     private static boolean isStandard() {
@@ -113,7 +113,7 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
             }
         }
     }
-{% endhighlight %}  
+``` 
 
 对于 android3 之前的系统，我们在 onPause 中处理 锁屏问题，如果 onPause 被触发的时候，手机处于 “非交互” 状态，就认为是按下了电源键（或者其他锁屏方式），触发“后台”状态。
 在 onResume 中判断如果是从锁屏界面恢复，则回到“前台”状态。
@@ -153,13 +153,13 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
         KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         return keyguardManager.inKeyguardRestrictedInputMode();
     }
-{% endhighlight %}  
+``` 
 
 在锁屏状态下就不触发计数。但是这个判断根本不可信，在快速切换的情况下，在非锁屏情况下返回 true 的几率也比较大。
 
 2. 网上有一种判断应用是否在前台的方法
 
-{% highlight java %}
+```java
     public boolean isAppOnForeground() {
     
         ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE); 
@@ -179,7 +179,7 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
         } 
         return false; 
     } 
-{% endhighlight %}  
+``` 
 
 但是这种测试方法并不靠谱，比如在魅族手机上，锁屏状态下也是返回 true。
 
