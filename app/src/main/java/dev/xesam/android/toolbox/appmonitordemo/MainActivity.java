@@ -4,13 +4,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import dev.xesam.android.toolbox.appmonitor.ProcessMonitor;
+import dev.xesam.android.toolbox.appmonitor.ScreenBroadcastReceiver;
 
 public class MainActivity extends AppCompatActivity {
+
+    ScreenBroadcastReceiver screenBroadcastReceiver = new ScreenBroadcastReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        screenBroadcastReceiver.register(this);
     }
 
     @Override
@@ -35,5 +39,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         ProcessMonitor.onStop(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        screenBroadcastReceiver.unRegister(this);
     }
 }

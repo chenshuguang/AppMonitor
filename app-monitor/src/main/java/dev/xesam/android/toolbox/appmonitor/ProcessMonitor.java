@@ -19,6 +19,7 @@ public class ProcessMonitor {
     private static final String TAG = "ProcessMonitor";
 
     private static int compatStartCount = 0;
+
     private static boolean isCompatForeground = true;
     private static boolean isCompatLockStop = false;
 
@@ -89,13 +90,15 @@ public class ProcessMonitor {
             if (activityLifecycleCallbacks == null) {
                 activityLifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
 
+                    ScreenBroadcastReceiver screenBroadcastReceiver = new ScreenBroadcastReceiver();
+
                     private int mStartCount = 0;
 
                     private boolean mIsForeground = true;
 
                     @Override
                     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
+                        screenBroadcastReceiver.register(activity);
                     }
 
                     @Override
@@ -132,7 +135,7 @@ public class ProcessMonitor {
 
                     @Override
                     public void onActivityDestroyed(Activity activity) {
-
+                        screenBroadcastReceiver.unRegister(activity);
                     }
                 };
             }
