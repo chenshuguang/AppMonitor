@@ -65,7 +65,7 @@ Android 本身并有提供这样的监听，所以就只能走偏门了。
 
 ## 开始趟坑
 
-1. 在关掉/点亮屏幕的情况下，android3 之前不会触发 onStart 和 onStop 回调。只会触发 onPause 和 onStop。所以以上代码失效。
+1. 在关掉/点亮屏幕的情况下，android3 之前不会触发 onStart 和 onStop 回调。只会触发 onPause 和 onResume。所以以上代码失效。
 按理来说，这应该是 Android 的含糊之处，onStop 的触发时机定义如下：
 
         Called when you are no longer visible to the user
